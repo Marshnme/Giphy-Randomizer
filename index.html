@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giphy Search</title>
+    <style>
+        body{
+            display: flex;
+            flex-flow: column nowrap;
+            width: 100%;
+            margin: 0 auto;
+        }
+        input,button{
+            
+            margin: 0 auto;
+        }
+        input{
+            margin-top:1rem;
+            width:30%;
+        }
+        button{
+            margin-top:1rem;
+            width:10%;
+        }
+        img{
+            width:50%;
+            margin:0 auto;
+            margin-top:2rem;
+        }
+        div{
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    
+    <input type="text">
+    <button>Search</button>
+    <img id = 'main-img' src="#" alt="">
+    <div></div>
+
+
+    <script>
+        let searchInput = document.querySelector('input')
+        let submitButton = document.querySelector('button')
+        let searchQuery = searchInput.value
+        let div = document.querySelector('div')
+
+        searchInput.addEventListener('input',function(){
+            searchQuery = searchInput.value
+        })
+
+        submitButton.addEventListener('click',fetchImg)
+
+        const img = document.getElementById('main-img')
+        
+        let errorMsgContain = document.createElement('p')
+        div.appendChild(errorMsgContain)
+
+
+        function fetchImg (e){
+            e.preventDefault()
+            
+            fetch(`https://api.giphy.com/v1/gifs/translate?api_key=0xMAocYlR6Byky5GzYB09EDC16HzXHJR&s=${searchQuery}`, {mode: 'cors'})
+            .then((res)=>{
+                return res.json()
+            })
+            .then((res)=>{
+                console.log(res)
+                img.src = res.data.images.original.url;
+                if(res.data.images){
+                    errorMsgContain.innerHTML = '<p></p>'
+                }
+                console.log(errorMsgContain)
+            })
+            .catch((err)=>{
+                console.log(err)
+                
+                errorMsgContain.innerHTML = 'Image not found, try a different keyword'
+                img.src = '#'
+                
+            })
+        }
+        
+    </script>
+</body>
+</html>
