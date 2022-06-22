@@ -60,28 +60,22 @@
         div.appendChild(errorMsgContain)
 
 
-        function fetchImg (e){
-            e.preventDefault()
+        async function fetchImg (){
+            try {
+                const res = await fetch(`https://api.giphy.com/v1/gifs/translate?api_key=0xMAocYlR6Byky5GzYB09EDC16HzXHJR&s=${searchQuery}`, {mode: 'cors'})
             
-            fetch(`https://api.giphy.com/v1/gifs/translate?api_key=0xMAocYlR6Byky5GzYB09EDC16HzXHJR&s=${searchQuery}`, {mode: 'cors'})
-            .then((res)=>{
-                return res.json()
-            })
-            .then((res)=>{
-                console.log(res)
-                img.src = res.data.images.original.url;
-                if(res.data.images){
+                const data = await res.json()
+                console.log(data)
+                img.src = data.data.images.original.url;
+                if(data.data.images){
                     errorMsgContain.innerHTML = '<p></p>'
                 }
-                console.log(errorMsgContain)
-            })
-            .catch((err)=>{
-                console.log(err)
+            } catch (error) {
+                console.log(error)
                 
                 errorMsgContain.innerHTML = 'Image not found, try a different keyword'
                 img.src = '#'
-                
-            })
+            } 
         }
         
     </script>
